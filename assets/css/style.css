@@ -26,7 +26,7 @@ body {
 }
 
 .header-bg {
-  background-color: var(--light-orange);
+  border-bottom: 1px solid #e4e4e4;
   padding: 20px;
 }
 
@@ -42,9 +42,15 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+  list-style: none;
 }
 
-.header-menu > span {
+.header-menu li {
+  display: flex;
+  align-items: center;
+}
+
+.header-menu li span {
   cursor: pointer;
   font-size: 28px;
   color: var(--brown);
