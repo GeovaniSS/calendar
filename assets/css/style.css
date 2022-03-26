@@ -25,8 +25,25 @@ body {
   font-family: 'Inter';
 }
 
+h1 {
+  font-size: 36px;
+  color: var(--dark);
+}
+
 h4 {
   font-weight: normal;
+}
+
+p {
+  color: var(--dark);
+}
+
+button {
+  border: none;
+  font-family: 'Inter';
+  font-weight: bold;
+  font-size: 18px;
+  color: var(--white);
 }
 
 .header-bg {
@@ -66,8 +83,66 @@ h4 {
   border-radius: 50%;
 }
 
+section {
+  padding: 20px 0;
+}
+
+.s-calendar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 20px 20px 10px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.s-calendar p {
+  padding: 0 0 0 10px;
+  width: 40ch;
+}
+
+.s-calendar--container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.s-calendar--year {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.s-calendar--year span {
+  cursor: pointer;
+  font-size: 36px;
+  color: var(--dark);
+}
+
+.add-event {
+  cursor: pointer;
+  background-color: var(--dark);
+  padding: 6px 20px;
+  border-radius: 4px;
+}
+
 @media screen and (max-width: 500px) {
   .header {
+    justify-content: center;
+  }
+  
+  .s-calendar {
+    align-items: center;
+  }
+
+  .s-calendar p {
+    text-align: center;
+    width: 30ch;
+  }
+
+  .s-calendar--container {
     justify-content: center;
   }
 }
