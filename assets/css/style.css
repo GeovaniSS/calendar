@@ -11,7 +11,7 @@
 :root {
   --bg-color: #F9F9F8;
   --orange: #EB5E28;
-  --light-orange: rgba(255, 85, 0, 50%);
+  --light-orange: rgba(223, 191, 175, 30%);
   --very-light-orange: rgba(223, 191, 175, 30%);
   --brown: #403D39;
   --gray: #5F5F5F;
@@ -129,7 +129,7 @@ section {
 }
 
 /*-------------------------------*/
-/*        Calendar Events        */
+/*           Calendar            */
 /*-------------------------------*/
 
 .s-calendar--events {
@@ -142,19 +142,106 @@ section {
 }
 
 .calendar {
-  background-color: red;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  /* background-color: red; */
 }
 
+.week-days {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+}
+
+.week-days > div {
+  font-weight: normal;
+  color: var(--gray);
+  text-transform: uppercase;
+}
+
+.divider {
+  content: '';
+  width: 100%;
+  height: 2.5px;
+  background-color: var(--dark);
+}
+
+.month-days {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  place-items: center;
+  gap: 50px 10px;
+}
+
+.previous-month {
+  color: var(--light-gray);
+}
+
+/*-------------------------------*/
+/*        Calendar Events        */
+/*-------------------------------*/
+
 .calendar-events {
-  background-color: yellow;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  /* background-color: yellow; */
 }
 
 .current-day {
   font-size: 20px;
   font-weight: bold;
   color: var(--dark);
-  border-bottom: 2.5px solid var(--dark);
 }
+
+/*-------------------------------*/
+/*             Events            */
+/*-------------------------------*/
+
+.events {
+  margin-top: 20px;
+}
+
+.event {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  padding: 15px;
+}
+
+.event {
+  background-color: var(--bg-color);
+}
+
+.select-event {
+  border-top: 2.5px solid var(--orange);
+  background-color: var(--light-orange);
+}
+
+.event-hour, .select-event--hour {
+  font-weight: 500;
+}
+
+.event-hour {
+  color: var(--dark);
+}
+
+.select-event--hour {
+  color: var(--orange);
+}
+
+.event-type, .select-event--type {
+  font-weight: 500;
+  color: var(--brown);
+}
+
+.event-description, .select-event--description {
+  font-size: 14px;
+  color: var(--gray);
+}
+
 
 @media screen and (max-width: 500px) {
   .header {
