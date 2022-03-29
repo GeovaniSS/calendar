@@ -52,7 +52,7 @@
       <div class="calendar">
         <div class="week-days">
           <div>dom</div>
-          <div>seg</div>
+          <div class="current-week--day">seg</div>
           <div>ter</div>
           <div>qua</div>
           <div>qui</div>
@@ -61,10 +61,10 @@
         </div>
         <div class="divider"></div>
         <div class="month-days">
-          <div class="previous-month">28</div>
-          <div class="previous-month">29</div>
-          <div class="previous-month">30</div>
-          <div class="previous-month">31</div>
+          <div class="previous-month--day">28</div>
+          <div class="previous-month--day">29</div>
+          <div class="previous-month--day">30</div>
+          <div class="previous-month--day">31</div>
           <div>1</div>
           <div>2</div>
           <div>3</div>
@@ -90,11 +90,34 @@
           <div>23</div>
           <div>24</div>
           <div>25</div>
-          <div>26</div>
-          <div>27</div>
-          <div>28</div>
-          <div>29</div>
-          <div>30</div>
+          <span>26</span>
+          <span>27</span>
+          
+          <div class="month-day">
+            <span class="current-month--day">28</span>
+            <div class="current-events">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+
+          <div class="month-day">
+            <span>29</span>
+            <div class="next-events">
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+
+          <div class="month-day">
+            <span>30</span>
+            <div class="next-events">
+              <span></span>
+            </div>
+          </div>
+
           <div>31</div>
         </div>
       </div>
@@ -103,38 +126,38 @@
         <div class="current-day">Março, 23</div>
         <div class="divider"></div>
         <div class="events">
-          <div class="event">
-            <div class="select-event">
-              <h2 class="select-event--hour">14:00 - 15:00</h2>
-              <h4 class="select-event--type">Gestão de TI</h4>
-              <p class="select-event--description">Faculdade</p>
+          <div class="event-card--selected">
+            <div class="event">
+              <h2 class="event-hour selected">14:00 - 15:00</h2>
+              <h4 class="event-type">Gestão de TI</h4>
+              <p class="event-description">Faculdade</p>
             </div>
             <span class="material-icons-sharp">more_horiz</span>
           </div>
           
-          <div class="event">
-            <div class="unselected-event">
-              <h2 class="unselected-event--hour">15:00 - 16:00</h2>
-              <h4 class="unselected-event--type">Estudar CSS</h4>
-              <p class="unselected-event--description">Origamid</p>
+          <div class="event-card">
+            <div class="event">
+              <h2 class="event-hour">15:00 - 16:00</h2>
+              <h4 class="event-type">Estudar CSS</h4>
+              <p class="event-description">Origamid</p>
             </div>
             <span class="material-icons-sharp">more_horiz</span>
           </div>
 
-          <div class="event">
-            <div class="unselected-event">
-              <h2 class="unselected-event--hour">15:00 - 16:00</h2>
-              <h4 class="unselected-event--type">Estudar CSS</h4>
-              <p class="unselected-event--description">Origamid</p>
+          <div class="event-card">
+            <div class="event">
+              <h2 class="event-hour">17:00 - 18:00</h2>
+              <h4 class="event-type">Ir para a academia</h4>
+              <p class="event-description">Treinar tríceps</p>
             </div>
             <span class="material-icons-sharp">more_horiz</span>
           </div>
 
-          <div class="event">
-            <div class="unselected-event">
-              <h2 class="unselected-event--hour">15:00 - 16:00</h2>
-              <h4 class="unselected-event--type">Estudar CSS</h4>
-              <p class="unselected-event--description">Origamid</p>
+          <div class="event-card">
+            <div class="event">
+              <h2 class="event-hour">21:00 - 22:00</h2>
+              <h4 class="event-type">Ler um Livro</h4>
+              <p class="event-description">10 páginas</p>
             </div>
             <span class="material-icons-sharp">more_horiz</span>
           </div>
