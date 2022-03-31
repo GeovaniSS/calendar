@@ -221,7 +221,7 @@ section {
   background-color: var(--light-gray);
 }
 
-.previous-month--day {
+.prev-date, .next-date {
   color: var(--light-gray);
 }
 
