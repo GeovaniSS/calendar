@@ -1,67 +1,60 @@
-let nav = 0
+const date = new Date()
+const currentYear = date.getFullYear()
+const currentMonth = date.getMonth()
+
 const prev = document.querySelector('.prev')
 const next = document.querySelector('.next')
+let nav = currentMonth
 
-const data = new Date()
-const weekDays = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'] // Dias da Semana
-const monthDaysElement = document.querySelector('.month-days') // Calendário
-const currentDateElement = document.querySelector('.current-date')
+const calendar = document.querySelector('.month-days') 
 
-const clearMonthDays = () => {
-  monthDaysElement.innerText = ''
+const loadDate = (year, month) => {
+  const dateElement = document.querySelector('.date')
+  dateElement.innerText = getDate(year, month)
+
+  currentWeekDay(month)
 }
 
-const loadCurrentDate = () => {
-  const year = data.getFullYear()
-  const month = data.getMonth()
-  nav = month
+const currentWeekDay = (month) => {
+  const weekDays = [...document.querySelectorAll('.week-day')]
+  const currentWeekDay = date.getDay()
 
-  currentDateElement.innerText = getCurrentDate(year, month)
-
-  loadMonthDays(year, month)
-}
-
-const updateDate = (month) => {
-  const currentDateElement = document.querySelector('.current-date')
-  currentDateElement.innerText = getCurrentDate(2022, month)
-
-  clearMonthDays()
-  loadMonthDays(2022, month)
-}
-
-const currentWeekDay = () => {
-  const weekDaysElement = document.querySelectorAll('.week-day')
-  const weekDays = [...weekDaysElement]
-  const currentWeekDay = data.getDay()
-
-  weekDays.forEach((weekDay, index) => {
-    if (index === currentWeekDay) weekDay.classList.add('current-week--day')  
+  weekDays.forEach((weekDay, i) => {
+    weekDay.classList.remove('current-week--day')
+    if (i === currentWeekDay && month === currentMonth) {
+      weekDay.classList.add('current-week--day')
+    }
   })
 }
 
-const loadMonthDays = (year, month) => {
+const loadCalendar = (year, month) => {
+  calendar.innerText = ''
   const totalMonthDays = getTotalMonthDays(year, month)
   const totalPreviousMonthDays = getTotalMonthDays(year, month - 1)
-  const firstWeekDay = getfirstWeekDay(year, month) - 1 
-  const lastWeekDay = getLastWeekDay(year, month) + 1
 
-  for (let i = totalPreviousMonthDays - firstWeekDay; i <= totalPreviousMonthDays; i++) {
+  const firstDay = getfirstDay(year, month) - 1 
+  const lastDay = getLastDay(year, month) + 1
+  const today = date.getDate()
+
+  // Load Previous Month Days
+  for (let i = totalPreviousMonthDays - firstDay; i <= totalPreviousMonthDays; i++) {
     const previousMonthDayElement = createMonthDayElement(i)
     previousMonthDayElement.classList.add('prev-date')
-    monthDaysElement.appendChild(previousMonthDayElement)
+    calendar.appendChild(previousMonthDayElement)
   }
   
+  // Load Current Month Days
   for (let i = 1; i <= totalMonthDays; i++) {
     const monthDayElement = createMonthDayElement(i)
-    const currentDay = data.getDate()
-    if(i === currentDay) monthDayElement.classList.add('current-month--day')
-    monthDaysElement.appendChild(monthDayElement)
+    if(i === today && month === currentMonth) monthDayElement.classList.add('today')
+    calendar.appendChild(monthDayElement)
   }
 
-  for (let i = 1; i <= weekDays.length - lastWeekDay; i++) {
+  // Load Next Month Days
+  for (let i = 1; i <= 7 - lastDay; i++) {
     const nextMonthDayElement = createMonthDayElement(i)
     nextMonthDayElement.classList.add('next-date')
-    monthDaysElement.appendChild(nextMonthDayElement)
+    calendar.appendChild(nextMonthDayElement)
   }
 }
 
@@ -72,9 +65,9 @@ const createMonthDayElement = day => {
   return monthDayElement
 }
 
-const getCurrentDate = (year, month) => {
-  const currentDate = new Date(year, month)
-  return currentDate.toLocaleDateString('pt-BR', {month: 'long', year: 'numeric'})
+const getDate = (year, month) => {
+  const date = new Date(year, month)
+  return date.toLocaleDateString('pt-BR', {month: 'long', year: 'numeric'}).split(' de ').join(' ')
 }
 
 const getTotalMonthDays = (year, month) => {
@@ -82,24 +75,26 @@ const getTotalMonthDays = (year, month) => {
   return totalMonthDays.getDate()
 } 
 
-const getfirstWeekDay = (year, month) => {
+const getfirstDay = (year, month) => {
   const firstWeekDay = new Date(year, month, 1)
   return firstWeekDay.getDay()
 }
 
-const getLastWeekDay = (year, month) => {
+const getLastDay = (year, month) => {
   const lastWeekDay = new Date(year, month + 1, 0)
   return lastWeekDay.getDay()
 }
 
 prev.addEventListener('click', () => {
   nav--
-  updateDate(nav)
+  loadDate(currentYear, nav)
+  loadCalendar(currentYear, nav)
 })
 next.addEventListener('click', () => {
   nav++
-  updateDate(nav)
+  loadDate(currentYear, nav)
+  loadCalendar(currentYear, nav)
 })
 
-loadCurrentDate()
-currentWeekDay()
+loadDate(currentYear, currentMonth)
+loadCalendar(currentYear, currentMonth)
