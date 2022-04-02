@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
+input, textarea {
+  font-size: 15px;
+  font-family: 'Poppins';
+  color: #202124;
+  outline: none;
+  border: 1px solid #8F9BB3;
+  margin-bottom: 10px;
+}
+
+input::placeholder, textarea::placeholder {
+  color: #8F9BB3;
+}
+
+.modal-container {
+  display: none;
+  background-color: rgb(160, 160, 160);
+}
+
+.modal{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 15px;
+  background-color: rgb(255, 255, 255);
+  padding: 30px 20px;
+  border-radius: 32px;
+}
+
+.cancel-event {
+  cursor: pointer;
+  position: absolute;
+  right: 3%;
+  top: 1%;
+  font-size: 32px;
+  color: #EB5E28;
+}
+
+.modal h3 {
+  font-family: 'Poppins';
+  font-size: 20px;
+  font-weight: 500;
+  margin: auto;
+}
+
+.modal-form {
+  max-width: 300px;
+}
+
+.modal-form input, textarea {
+  width: 100%;
+  padding: 8px 8px;
+  border-radius: 4px;
+}
+
+.modal-form textarea {
+  height: 80px;
+}
+
+.modal-form .time {
+  display: flex;
+  gap: 10px;
+}
+
+.create-event {
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: normal;
+  background-color: #EB5E28;
+  padding: 10px 0;
+  border-radius: 8px;
+}
