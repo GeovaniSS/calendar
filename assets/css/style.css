@@ -232,7 +232,7 @@ section {
 .today {
   background-color: var(--orange);
   color: var(--white);
-  padding: 6px 8px;
+  padding: 6px 12px;
   border-radius: 50%;
 }
 
@@ -246,9 +246,10 @@ section {
   gap: 11.6px;
 }
 
-.current-day {
+.selected-day {
   font-size: 20px;
   font-weight: bold;
+  text-transform: capitalize;
   color: var(--dark);
 }
 

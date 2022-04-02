@@ -12,11 +12,15 @@ const loadDate = (year, month) => {
   const dateElement = document.querySelector('.date')
   dateElement.innerText = getDate(year, month)
 
+  // Abril, 1
+  const selectedDay = document.querySelector('.selected-day')
+  selectedDay.innerText = `${new Date(year, month).toLocaleDateString('pt-BR', {month: 'long'})}, ${date.getDate()}`
+
   currentWeekDay(month)
 }
 
 const currentWeekDay = (month) => {
-  const weekDays = [...document.querySelectorAll('.week-day')]
+  const weekDays = document.querySelectorAll('.week-days div')
   const currentWeekDay = date.getDay()
 
   weekDays.forEach((weekDay, i) => {
@@ -56,6 +60,19 @@ const loadCalendar = (year, month) => {
     nextMonthDayElement.classList.add('next-date')
     calendar.appendChild(nextMonthDayElement)
   }
+
+  const days = document.querySelectorAll('.month-days div')
+  const selectedDay = document.querySelector('.selected-day')
+
+  days.forEach((day) => day.addEventListener('click', () => {
+    if (day.classList.contains('prev-date')) return selectedDay.innerText = 
+    getSelectedDate(month - 1, day.innerText)
+    
+    if (day.classList.contains('next-date')) return selectedDay.innerText = 
+    getSelectedDate(month + 1, day.innerText)
+    
+    selectedDay.innerText = getSelectedDate(month, day.innerText)
+  }))
 }
 
 const createMonthDayElement = day => {
@@ -68,6 +85,11 @@ const createMonthDayElement = day => {
 const getDate = (year, month) => {
   const date = new Date(year, month)
   return date.toLocaleDateString('pt-BR', {month: 'long', year: 'numeric'}).split(' de ').join(' ')
+}
+
+const getSelectedDate = (month, day) => {
+  const date = new Date(currentYear, month, day)
+  return `${date.toLocaleDateString('pt-BR', {month: 'long'})}, ${date.toLocaleDateString('pt-BR', {day: 'numeric'})}`
 }
 
 const getTotalMonthDays = (year, month) => {
@@ -98,3 +120,11 @@ next.addEventListener('click', () => {
 
 loadDate(currentYear, currentMonth)
 loadCalendar(currentYear, currentMonth)
+
+// const event = {
+//   month: 2, 
+//   day: 31, 
+//   hour: '14:00 - 15:00',
+//   title: 'Gestão de TI',
+//   description: 'Faculdade'
+// }
