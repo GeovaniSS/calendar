@@ -14,25 +14,32 @@ input::placeholder, textarea::placeholder {
 }
 
 .modal-container {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10;
   display: none;
-  background-color: rgb(160, 160, 160);
+  justify-content: center;
+  align-items: center;
 }
 
 .modal{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 18%;
+  min-width: 300px;
   gap: 15px;
-  background-color: rgb(255, 255, 255);
   padding: 30px 20px;
-  border-radius: 32px;
+  border-radius: 28px;
+  background-color: rgb(255, 255, 255);
 }
 
-.cancel-event {
+.close-modal {
   cursor: pointer;
   position: absolute;
   right: 3%;
@@ -49,18 +56,18 @@ input::placeholder, textarea::placeholder {
 }
 
 .modal-form {
-  max-width: 300px;
+  width: 100%;
 }
 
-.modal-form input, textarea {
+.modal-form input {
   width: 100%;
   padding: 8px 8px;
   border-radius: 4px;
 }
 
-.modal-form textarea {
+/* .description {
   height: 80px;
-}
+} */
 
 .modal-form .time {
   display: flex;
@@ -68,6 +75,7 @@ input::placeholder, textarea::placeholder {
 }
 
 .create-event {
+  width: 100%;
   cursor: pointer;
   font-size: 16px;
   font-weight: normal;
