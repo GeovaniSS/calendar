@@ -14,11 +14,10 @@ const loadDate = month => {
   dateElement.innerText = getDate(month)
 
   // Abril, 2
+  currentWeekDay(month)
   if (month !== currentMonth) return
   const selectedDay = document.querySelector('.selected-day')
   selectedDay.innerText = getSelectedDate(month, today)
-
-  currentWeekDay(month)
 }
 
 const currentWeekDay = month => {
@@ -122,11 +121,3 @@ next.addEventListener('click', () => {
 
 loadDate(currentMonth)
 loadCalendar(currentMonth)
-
-// const event = {
-//   month: 2, 
-//   day: 31, 
-//   hour: '14:00 - 15:00',
-//   title: 'Gestão de TI',
-//   description: 'Faculdade'
-// }

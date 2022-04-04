@@ -265,16 +265,17 @@ section {
   color: var(--light-gray);
 }
 
-.event-card, .event-card--selected {
+.event-card, .event-card.selected {
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   background-color: var(--bg-color);
+  border-top: 2.5px solid transparent;
   padding: 15px;
 }
 
-.event-card--selected {
+.event-card.selected {
   border-top: 2.5px solid var(--orange);
   background-color: var(--light-orange);
 }
