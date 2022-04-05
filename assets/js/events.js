@@ -1,7 +1,24 @@
 const newEvent = document.querySelector('.add-event')
 const modal = document.querySelector('.modal-container')
 const modalForm = document.querySelector('.modal-form')
+const calendarDays = document.querySelectorAll('.month-days div')
 let events = []
+
+const loadEventsFromLocalStorage = () => {
+  const events = JSON.parse(localStorage.getItem('events'))
+  const selectedDay = document.querySelector('.selected-day').innerText.toLowerCase()
+
+  if(!events) return
+
+  events
+    .filter(event => {
+      const { date } = event
+      const data = new Date(date + ' ' + '00:00:00')
+      const eventDate = `${data.toLocaleDateString('pt-BR', {month: 'long'})}, ${data.toLocaleDateString('pt-BR', {day: 'numeric'})}`
+      return eventDate === selectedDay
+    })
+    .forEach(event => createEvent(event))
+}
 
 const colectForm = (e) => {
   e.preventDefault()
@@ -16,22 +33,6 @@ const colectForm = (e) => {
  
   updateEventsFromLocalStorage()
   createEvent(event)
-}
-
-const loadEventsFromLocalStorage = () => {
-  const events = JSON.parse(localStorage.getItem('events'))
-  const selectedDay = document.querySelector('.selected-day').innerText.toLowerCase()
-
-  if(!events) return
-
-  events.forEach(event => {
-    const {date} = event
-    const dataAtual = new Date(date + ' ' + '00:00:00')
-
-    if (`${dataAtual.toLocaleDateString('pt-BR', {month: 'long'})}, ${dataAtual.toLocaleDateString('pt-BR', {day: 'numeric'})}` === selectedDay) {
-      createEvent(event)
-    }
-  })
 }
 
 const updateEventsFromLocalStorage = () => {
@@ -119,3 +120,8 @@ modal.addEventListener('click', (e) => {
   if(e.target.classList.contains('close-modal')) modal.style.display = 'none'
 })
 modalForm.addEventListener('submit', colectForm)
+calendarDays.forEach(day => day.addEventListener('click', () => {
+  const events = document.querySelector('.events')
+  events.innerText = ''
+  loadEventsFromLocalStorage()
+}))
