@@ -1,8 +1,8 @@
 const newEvent = document.querySelector('.add-event')
 const modal = document.querySelector('.modal-container')
-const modalForm = document.querySelector('.modal-form')
+const form = document.querySelector('.modal-form')
 const calendarDays = document.querySelectorAll('.month-days div')
-let events = []
+let eventList = JSON.parse(localStorage.getItem('events')) || []
 
 const loadEventsFromLocalStorage = () => {
   const events = JSON.parse(localStorage.getItem('events'))
@@ -13,33 +13,35 @@ const loadEventsFromLocalStorage = () => {
   events
     .filter(event => {
       const { date } = event
-      const data = new Date(date + ' ' + '00:00:00')
-      const eventDate = `${data.toLocaleDateString('pt-BR', {month: 'long'})}, ${data.toLocaleDateString('pt-BR', {day: 'numeric'})}`
+      const newDate = new Date(date + ' ' + '00:00:00')
+      const eventDate = `${newDate.toLocaleDateString('pt-BR', {month: 'long'})}, ${newDate.toLocaleDateString('pt-BR', {day: 'numeric'})}`
       return eventDate === selectedDay
     })
-    .forEach(event => createEvent(event))
+    .forEach(event => createNewEvent(event))
 }
 
-const colectForm = (e) => {
+const handleFormData = (e) => {
   e.preventDefault()
   modal.style.display = 'none'
   
   const inputsElement = [...document.querySelectorAll('.modal-form input')]
-  const event = inputsElement.reduce((acc, input) => {
+  const eventData = inputsElement.reduce((acc, input) => {
     acc[input.classList.value] = input.value 
     return acc
   }, {})
-  events.push(event)
+  eventList.push(eventData)
+
+  inputsElement.forEach(input => input.value = '')
  
   updateEventsFromLocalStorage()
-  createEvent(event)
+  createNewEvent(eventData)
 }
 
 const updateEventsFromLocalStorage = () => {
-  localStorage.setItem('events', JSON.stringify(events))
+  localStorage.setItem('events', JSON.stringify(eventList))
 }
 
-const createEvent = event => {
+const createNewEvent = event => {
   const {title, description, startHour, endHour} = event
 
   const events = document.querySelector('.events')
@@ -76,7 +78,6 @@ const createEvent = event => {
   events.appendChild(eventCard)
 
   eventCard.addEventListener('click', () => handleClickEventCard(eventCard))
-
   eventOptions.addEventListener('click', () => {
     modal.style.display = 'flex'
   })
@@ -92,7 +93,7 @@ const createEvent = event => {
   // </div>
 }
 
-const handleClickEventCard = (eventCard) => {
+const handleClickEventCard = eventCard => {
   const eventCards = document.querySelectorAll('.event-card')
 
   eventCards.forEach(el => {
@@ -119,9 +120,10 @@ newEvent.addEventListener('click', () => modal.style.display = 'flex')
 modal.addEventListener('click', (e) => {
   if(e.target.classList.contains('close-modal')) modal.style.display = 'none'
 })
-modalForm.addEventListener('submit', colectForm)
+form.addEventListener('submit', handleFormData)
 calendarDays.forEach(day => day.addEventListener('click', () => {
-  const events = document.querySelector('.events')
-  events.innerText = ''
-  loadEventsFromLocalStorage()
+  console.log(day)
+  // const events = document.querySelector('.events')
+  // events.innerText = ''
+  // loadEventsFromLocalStorage()
 }))
