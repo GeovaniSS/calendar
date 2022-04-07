@@ -1,7 +1,6 @@
 const newEvent = document.querySelector('.add-event')
 const modal = document.querySelector('.modal-container')
 const form = document.querySelector('.modal-form')
-const calendarDays = document.querySelectorAll('.month-days div')
 let eventList = JSON.parse(localStorage.getItem('events')) || []
 
 const loadEventsFromLocalStorage = () => {
@@ -116,14 +115,37 @@ const handleClickEventCard = eventCard => {
 
 loadEventsFromLocalStorage()
 
-newEvent.addEventListener('click', () => modal.style.display = 'flex')
+newEvent.addEventListener('click', () => { 
+  modal.style.display = 'flex'
+
+  const dateInput = document.querySelector('.modal-form .date')
+  const selectedDay = document.querySelector('.selected-day').innerText.split(', ')
+  const month = selectedDay[0]
+  const day = selectedDay[1]
+  const date = new Date(2022, 3, day)
+
+  dateInput.value = date.toLocaleDateString('pt-BR').split('/').reverse().join('-')
+})
+
 modal.addEventListener('click', (e) => {
   if(e.target.classList.contains('close-modal')) modal.style.display = 'none'
 })
+
 form.addEventListener('submit', handleFormData)
-calendarDays.forEach(day => day.addEventListener('click', () => {
-  console.log(day)
-  // const events = document.querySelector('.events')
-  // events.innerText = ''
-  // loadEventsFromLocalStorage()
-}))
+
+document.addEventListener('click', (e) => {
+  const day = e.target
+  const calendar = document.querySelector('.month-days')
+  
+  if(calendar.contains(day)) {
+    const events = document.querySelector('.events')
+    events.innerText = ''
+    loadEventsFromLocalStorage()
+  }
+})
+
+// calendarDays.forEach(day => day.addEventListener('click', () => {
+//   const events = document.querySelector('.events')
+//   events.innerText = ''
+//   loadEventsFromLocalStorage()
+// }))
