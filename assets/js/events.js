@@ -113,24 +113,35 @@ const handleClickEventCard = eventCard => {
   })
 }
 
-loadEventsFromLocalStorage()
-
-newEvent.addEventListener('click', () => { 
+const loadDateInput = () => {
   modal.style.display = 'flex'
-
   const dateInput = document.querySelector('.modal-form .date')
+
   const selectedDay = document.querySelector('.selected-day').innerText.split(', ')
-  const month = selectedDay[0]
+  const month = getMonth(selectedDay[0])
   const day = selectedDay[1]
-  const date = new Date(2022, 3, day)
+
+  const date = new Date(2022, month, day)
 
   dateInput.value = date.toLocaleDateString('pt-BR').split('/').reverse().join('-')
-})
+}
 
+const getMonth = month => {
+  const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+
+  for (let i in months) {
+    if (months[i] === month) {
+      return i
+    }
+  }
+}
+
+loadEventsFromLocalStorage()
+
+newEvent.addEventListener('click', () => loadDateInput())
 modal.addEventListener('click', (e) => {
   if(e.target.classList.contains('close-modal')) modal.style.display = 'none'
 })
-
 form.addEventListener('submit', handleFormData)
 
 document.addEventListener('click', (e) => {
@@ -143,9 +154,3 @@ document.addEventListener('click', (e) => {
     loadEventsFromLocalStorage()
   }
 })
-
-// calendarDays.forEach(day => day.addEventListener('click', () => {
-//   const events = document.querySelector('.events')
-//   events.innerText = ''
-//   loadEventsFromLocalStorage()
-// }))
