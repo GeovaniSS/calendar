@@ -10,7 +10,6 @@ const next = document.querySelector('.next')
 let nav = currentMonth
 
 const calendar = document.querySelector('.month-days') 
-const selectedDay = document.querySelector('.selected-day')
 
 const loadDate = month => {
   const dateElement = document.querySelector('.date')
@@ -23,9 +22,11 @@ const loadDate = month => {
     if (i === currentWeek && month === currentMonth) 
       weekDay.classList.add('current-week--day')
   })
+}
 
-  if (month !== currentMonth) return
-  selectedDay.innerText = getSelectedDate(month, today)
+const loadSelectedDay = (month, day) => {
+  const selectedDay = document.querySelector('.selected-day')
+  selectedDay.innerText = getSelectedDate(month, day)
 }
 
 const loadCalendar = month => {
@@ -69,12 +70,12 @@ const handleSelectedDay = month => {
 
   days.forEach(day => day.addEventListener('click', () => {
     if (day.classList.contains('prev-date')) 
-      return selectedDay.innerText = getSelectedDate(month - 1, day.innerText)
+      return loadSelectedDay(month - 1, day.innerText)
     
     if (day.classList.contains('next-date')) 
-      return selectedDay.innerText = getSelectedDate(month + 1, day.innerText)
+      return loadSelectedDay(month + 1, day.innerText)
     
-    selectedDay.innerText = getSelectedDate(month, day.innerText)
+    loadSelectedDay(month, day.innerText)
   }))
 }
 
@@ -122,4 +123,5 @@ next.addEventListener('click', () => {
 })
 
 loadDate(currentMonth)
+loadSelectedDay(currentMonth, today)
 loadCalendar(currentMonth)
