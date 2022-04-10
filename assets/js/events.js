@@ -77,9 +77,7 @@ const createNewEvent = event => {
   events.appendChild(eventCard)
 
   eventCard.addEventListener('click', () => handleClickEventCard(eventCard))
-  eventOptions.addEventListener('click', () => {
-    modal.style.display = 'flex'
-  })
+  eventOptions.addEventListener('click', () => handleEventEdit(eventCard))
 
 
   // <div class="event-card">
@@ -90,6 +88,35 @@ const createNewEvent = event => {
   //   </div>
   //   <span class="material-icons-sharp">more_horiz</span>
   // </div>
+}
+
+const handleEventEdit = eventCard => {
+  modal.style.display = 'flex'
+
+  const eventCards = document.querySelectorAll('.event-card')
+
+  eventCards.forEach((el) => {
+    const eventCardIsBeingClicked = el === eventCard
+    
+    if(eventCardIsBeingClicked) {
+      const events = JSON.parse(localStorage.getItem('events'))
+
+      events.forEach(event => {
+        const {title, description, startHour, endHour} = event
+        
+        const eventTitle = el.querySelector('.event-title').innerText
+        const eventDescription = el.querySelector('.event-description').innerText
+        const eventHour = el.querySelector('.event-hour').innerText.splice(' - ')
+
+        console.log(eventTitle, eventDescription, eventHour)
+
+        // if (title === eventTitle && description === eventDescription && startHour === eventHour[0] && endHour === eventHour[1]) {
+        // }
+        // console.log(title, description, startHour, endHour)
+      })
+    }
+  })
+
 }
 
 const handleClickEventCard = eventCard => {
@@ -122,7 +149,6 @@ const loadDateInput = () => {
   const day = selectedDay[1]
 
   const date = new Date(2022, month, day)
-
   dateInput.value = date.toLocaleDateString('pt-BR').split('/').reverse().join('-')
 }
 
@@ -130,9 +156,7 @@ const getMonth = month => {
   const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
 
   for (let i in months) {
-    if (months[i] === month) {
-      return i
-    }
+    if (months[i] === month) return i
   }
 }
 
@@ -143,7 +167,6 @@ modal.addEventListener('click', (e) => {
   if(e.target.classList.contains('close-modal')) modal.style.display = 'none'
 })
 form.addEventListener('submit', handleFormData)
-
 document.addEventListener('click', (e) => {
   const day = e.target
   const calendar = document.querySelector('.month-days')

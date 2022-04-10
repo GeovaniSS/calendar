@@ -1,6 +1,8 @@
 const date = new Date()
+
 const year = date.getFullYear()
 const currentMonth = date.getMonth()
+const currentWeek = date.getDay()
 const today = date.getDate()
 
 const prev = document.querySelector('.prev')
@@ -8,28 +10,22 @@ const next = document.querySelector('.next')
 let nav = currentMonth
 
 const calendar = document.querySelector('.month-days') 
+const selectedDay = document.querySelector('.selected-day')
 
 const loadDate = month => {
   const dateElement = document.querySelector('.date')
   dateElement.innerText = getDate(month)
-
-  // Abril, 2
-  currentWeekDay(month)
-  if (month !== currentMonth) return
-  const selectedDay = document.querySelector('.selected-day')
-  selectedDay.innerText = getSelectedDate(month, today)
-}
-
-const currentWeekDay = month => {
+  
   const weekDays = document.querySelectorAll('.week-days div')
-  const currentWeekDay = date.getDay()
-
   weekDays.forEach((weekDay, i) => {
     weekDay.classList.remove('current-week--day')
-    if (i === currentWeekDay && month === currentMonth) {
+    
+    if (i === currentWeek && month === currentMonth) 
       weekDay.classList.add('current-week--day')
-    }
   })
+
+  if (month !== currentMonth) return
+  selectedDay.innerText = getSelectedDate(month, today)
 }
 
 const loadCalendar = month => {
@@ -51,7 +47,10 @@ const loadCalendar = month => {
   // Load Current Month Days
   for (let i = 1; i <= totalMonthDays; i++) {
     const monthDayElement = createMonthDayElement(i)
-    if(i === today && month === currentMonth) monthDayElement.classList.add('today')
+
+    if(i === today && month === currentMonth) 
+      monthDayElement.classList.add('today')
+
     calendar.appendChild(monthDayElement)
   }
 
@@ -62,15 +61,18 @@ const loadCalendar = month => {
     calendar.appendChild(nextMonthDayElement)
   }
 
+  handleSelectedDay(month)
+}
+
+const handleSelectedDay = month => {
   const days = document.querySelectorAll('.month-days div')
-  const selectedDay = document.querySelector('.selected-day')
 
   days.forEach(day => day.addEventListener('click', () => {
-    if (day.classList.contains('prev-date')) return selectedDay.innerText = 
-    getSelectedDate(month - 1, day.innerText)
+    if (day.classList.contains('prev-date')) 
+      return selectedDay.innerText = getSelectedDate(month - 1, day.innerText)
     
-    if (day.classList.contains('next-date')) return selectedDay.innerText = 
-    getSelectedDate(month + 1, day.innerText)
+    if (day.classList.contains('next-date')) 
+      return selectedDay.innerText = getSelectedDate(month + 1, day.innerText)
     
     selectedDay.innerText = getSelectedDate(month, day.innerText)
   }))
@@ -85,12 +87,12 @@ const createMonthDayElement = day => {
 
 const getDate = month => {
   const date = new Date(year, month)
-  return date.toLocaleDateString('pt-BR', {month: 'long', year: 'numeric'}).split(' de ').join(' ')
+  return `${date.toLocaleDateString('pt-BR', {month: 'long'})} ${date.getFullYear()}`
 }
 
 const getSelectedDate = (month, day) => {
   const date = new Date(year, month, day)
-  return `${date.toLocaleDateString('pt-BR', {month: 'long'})}, ${date.toLocaleDateString('pt-BR', {day: 'numeric'})}`
+  return `${date.toLocaleDateString('pt-BR', {month: 'long'})}, ${date.getDate()}`
 }
 
 const getTotalMonthDays = month => {
@@ -99,13 +101,13 @@ const getTotalMonthDays = month => {
 } 
 
 const getfirstDay = month => {
-  const firstWeekDay = new Date(year, month, 1)
-  return firstWeekDay.getDay()
+  const firstDay = new Date(year, month, 1)
+  return firstDay.getDay()
 }
 
 const getLastDay = month => {
-  const lastWeekDay = new Date(year, month + 1, 0)
-  return lastWeekDay.getDay()
+  const lastDay = new Date(year, month + 1, 0)
+  return lastDay.getDay()
 }
 
 prev.addEventListener('click', () => {
