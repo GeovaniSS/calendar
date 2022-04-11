@@ -292,7 +292,7 @@ section {
   color: var(--dark);
 }
 
-.event-hour.selected {
+.event-card.selected .event-hour {
   color: var(--orange);
 }
 

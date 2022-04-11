@@ -76,6 +76,9 @@ const handleSelectedDay = month => {
       return loadSelectedDay(month + 1, day.innerText)
     
     loadSelectedDay(month, day.innerText)
+    
+    events.innerText = ''
+    loadEventsFromLocalStorage()
   }))
 }
 
