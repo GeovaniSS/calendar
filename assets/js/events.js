@@ -30,11 +30,16 @@ const handleModalFormData = (e) => {
     return acc
   }, {})
   eventList.push(eventData)
-
+  
+  const dataInput = document.querySelector('.modal-form .date')
+  const date = new Date(`${dataInput.value} 00:00:00`)
+  const dateString = `${date.toLocaleDateString('pt-BR', {month: 'long'})}, ${date.getDate()}`
+  const selectedDay = document.querySelector('.selected-day').innerText.toLowerCase()
+  
   inputsElement.forEach(input => input.value = '')
- 
+  
+  if (dateString === selectedDay) createNewEvent(eventData)
   updateEventsFromLocalStorage()
-  createNewEvent(eventData)
 }
 
 const updateEventsFromLocalStorage = () => {
@@ -94,28 +99,38 @@ const handleEventEdit = eventDetails => {
   const eventCards = events.children
 
   for (let eventCard of eventCards) {
+    console.log(eventCard.classList.value)
     const eventCardIsBeingEdited = eventCard.lastChild === eventDetails
 
-    if (eventCardIsBeingEdited) {
+    if (eventCardIsBeingEdited) { 
       const eventWrapper = eventCard.firstChild
       const eventHour = eventWrapper.firstChild
-      const startHour = eventHour.innerText.split(' - ')[0]
-      const endHour = eventHour.innerText.split(' - ')[1]
-      const eventTitle = eventHour.nextSibling.innerText
-      const eventDescription = eventWrapper.lastChild.innerText
 
-      const titleInput = document.querySelector('.title')
-      const descriptionInput = document.querySelector('.description')
-      const startHourInput = document.querySelector('.startHour')
-      const endHourInput = document.querySelector('.endHour')
+      const event = {
+        title: eventHour.nextSibling.innerText,
+        description: eventWrapper.lastChild.innerText,
+        date: loadModalDateInput(),
+        startHour: eventHour.innerText.split(' - ')[0],
+        endHour: eventHour.innerText.split(' - ')[1]
+      }
 
-      titleInput.value = eventTitle
-      descriptionInput.value = eventDescription
-      startHourInput.value = startHour
-      endHourInput.value = endHour
-      loadModalDateInput()
+      const inputsElement = [...document.querySelectorAll('.modal-form input')]
+      inputsElement.forEach(input => {
+        for (let key in event) {
+          if(key === input.classList.value) {
+            input.value = event[key]
+          }
+        }
+      })
 
       events.removeChild(eventCard)
+      eventList.forEach((eventData, i) => {
+        if (eventData === event) {
+          eventList.splice(i, 1)
+        }
+      })
+
+      updateEventsFromLocalStorage()
     }
   }
 }
@@ -144,7 +159,7 @@ const loadModalDateInput = () => {
   const month = monthFromString(selectedDay[0])
   const day = selectedDay[1]
 
-  dateInput.value = new Date(`2022-${month}-${day} 00:00:00`)
+  return dateInput.value = new Date(`2022-${month}-${day} 00:00:00`)
   .toLocaleDateString('pt-BR').split('/').reverse().join('-')
 }
 
