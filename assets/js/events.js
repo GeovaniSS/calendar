@@ -13,7 +13,7 @@ const loadEventsFromLocalStorage = () => {
   events
     .filter(event => {
       const { date } = event
-      const newDate = new Date(date + ' ' + '00:00:00')
+      const newDate = new Date(`${date} 00:00:00`)
       const eventDate = `${newDate.toLocaleDateString('pt-BR', {month: 'long'})}, ${newDate.getDate()}`
       return eventDate === selectedDay
     })
@@ -43,6 +43,8 @@ const handleModalFormData = (e) => {
 }
 
 const updateEventsFromLocalStorage = () => {
+  console.log(eventList)
+
   localStorage.setItem('events', JSON.stringify(eventList))
 }
 
@@ -98,8 +100,9 @@ const handleEventEdit = eventDetails => {
 
   const eventCards = events.children
 
+  // if(!eventCards) return
+
   for (let eventCard of eventCards) {
-    console.log(eventCard.classList.value)
     const eventCardIsBeingEdited = eventCard.lastChild === eventDetails
 
     if (eventCardIsBeingEdited) { 
@@ -123,14 +126,27 @@ const handleEventEdit = eventDetails => {
         }
       })
 
-      events.removeChild(eventCard)
-      eventList.forEach((eventData, i) => {
-        if (eventData === event) {
-          eventList.splice(i, 1)
+      modal.addEventListener('click', (e) => {
+        const el = e.target
+        
+        if (el.classList.contains('close-modal')) {
+          events.removeChild(eventCard)
         }
-      })
 
-      updateEventsFromLocalStorage()
+        eventList.forEach(eventData => {
+          const { title, description, date, startHour, endHour} = eventData
+
+          console.log(eventData)
+          console.log(event)
+
+          if(title === event.title && description === event.description && date === event.date && startHour === event.startHour && endHour === event.endHour) {
+            console.log('Ai')
+            // eventList.splice(eventList.indexOf(eventData), 1)
+            // updateEventsFromLocalStorage()
+          }
+        })
+      })
+      
     }
   }
 }
