@@ -133,16 +133,12 @@ const handleEventEdit = eventDetails => {
           events.removeChild(eventCard)
         }
 
-        eventList.forEach(eventData => {
+        eventList.forEach((eventData, i) => {
           const { title, description, date, startHour, endHour} = eventData
-
-          console.log(eventData)
-          console.log(event)
-
+          
           if(title === event.title && description === event.description && date === event.date && startHour === event.startHour && endHour === event.endHour) {
-            console.log('Ai')
-            // eventList.splice(eventList.indexOf(eventData), 1)
-            // updateEventsFromLocalStorage()
+            eventList.splice(i, 1)
+            updateEventsFromLocalStorage()
           }
         })
       })
