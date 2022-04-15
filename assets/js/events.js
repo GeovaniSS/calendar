@@ -6,16 +6,13 @@ let eventList = JSON.parse(localStorage.getItem('events')) || []
 
 const loadEventsFromLocalStorage = () => {
   const events = JSON.parse(localStorage.getItem('events'))
-  const selectedDay = document.querySelector('.selected-day').innerText.toLowerCase()
 
   if(!events) return
 
   events
     .filter(event => {
       const { date } = event
-      const newDate = new Date(`${date} 00:00:00`)
-      const eventDate = `${newDate.toLocaleDateString('pt-BR', {month: 'long'})}, ${newDate.getDate()}`
-      return eventDate === selectedDay
+      return eventDateIsEqualSelectedDay(date)
     })
     .forEach(event => createNewEvent(event))
 }
@@ -31,20 +28,24 @@ const handleModalFormData = (e) => {
   }, {})
   eventList.push(eventData)
   
-  const dataInput = document.querySelector('.modal-form .date')
-  const date = new Date(`${dataInput.value} 00:00:00`)
-  const dateString = `${date.toLocaleDateString('pt-BR', {month: 'long'})}, ${date.getDate()}`
-  const selectedDay = document.querySelector('.selected-day').innerText.toLowerCase()
+  const dataInput = document.querySelector('.modal-form .date').value
+  
+  if (eventDateIsEqualSelectedDay(dataInput)) 
+  createNewEvent(eventData)
   
   inputsElement.forEach(input => input.value = '')
-  
-  if (dateString === selectedDay) createNewEvent(eventData)
   updateEventsFromLocalStorage()
 }
 
-const updateEventsFromLocalStorage = () => {
-  console.log(eventList)
+const eventDateIsEqualSelectedDay = (eventDate) => {
+  const date = new Date(`${eventDate} 00:00:00`)
+  const dateString = `${date.toLocaleDateString('pt-BR', {month: 'long'})}, ${date.getDate()}`
+  const selectedDay = document.querySelector('.selected-day').innerText.toLowerCase()
 
+  return dateString === selectedDay
+}
+
+const updateEventsFromLocalStorage = () => {
   localStorage.setItem('events', JSON.stringify(eventList))
 }
 
@@ -125,25 +126,55 @@ const handleEventEdit = eventDetails => {
           }
         }
       })
+      
+      modal.addEventListener('click', (e) => handleDeleteEventCard(e, eventCard))
+      eventList.forEach((eventData, i) => {
+        const { title, description, date, startHour, endHour} = eventData
 
-      modal.addEventListener('click', (e) => {
-        const el = e.target
-        
-        if (el.classList.contains('close-modal')) {
-          events.removeChild(eventCard)
-        }
-
-        eventList.forEach((eventData, i) => {
-          const { title, description, date, startHour, endHour} = eventData
-          
           if(title === event.title && description === event.description && date === event.date && startHour === event.startHour && endHour === event.endHour) {
             eventList.splice(i, 1)
             updateEventsFromLocalStorage()
           }
-        })
       })
+
+      // events.removeChild(eventCard)
+      // eventList.forEach((eventData, i) => {
+      //   const { title, description, date, startHour, endHour} = eventData
+
+      //     if(title === event.title && description === event.description && date === event.date && startHour === event.startHour && endHour === event.endHour) {
+      //       eventList.splice(i, 1)
+      //       updateEventsFromLocalStorage()
+      //     }
+      // })
+      // modal.addEventListener('click', (e) => {
+      //   const el = e.target
+        
+      //   if (el.classList.contains('close-modal')) {
+      //     events.removeChild(eventCard)
+      //   }
+
+      //   eventList.forEach((eventData, i) => {
+      //     const { title, description, date, startHour, endHour} = eventData
+
+      //     if(title === event.title && description === event.description && date === event.date && startHour === event.startHour && endHour === event.endHour) {
+      //       eventList.splice(i, 1)
+      //       updateEventsFromLocalStorage()
+      //     }
+      //   })
+      // })
       
     }
+  }
+}
+
+const handleDeleteEventCard = (e, eventCard) => {
+  const el = e.target
+
+  if(el.classList.contains('close-modal')) {
+    modal.style.display = 'none'
+    
+    if(!eventCard) return
+    events.removeChild(eventCard)
   }
 }
 
@@ -200,9 +231,5 @@ const monthFromString = monthString => {
 loadEventsFromLocalStorage()
 
 newEvent.addEventListener('click', () => loadModalDateInput())
-modal.addEventListener('click', (e) => {
-  const el = e.target
-  if(el.classList.contains('close-modal')) 
-    modal.style.display = 'none'
-})
+modal.addEventListener('click', (e) => handleDeleteEventCard(e))
 form.addEventListener('submit', (e) => handleModalFormData(e))
