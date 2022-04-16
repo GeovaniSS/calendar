@@ -1,7 +1,7 @@
-const events = document.querySelector('.events')
 const newEvent = document.querySelector('.add-event')
 const modal = document.querySelector('.modal-container')
 const form = document.querySelector('.modal-form')
+const events = document.querySelector('.events')
 let eventList = JSON.parse(localStorage.getItem('events')) || []
 
 const loadEventsFromLocalStorage = () => {
@@ -28,10 +28,10 @@ const handleModalFormData = (e) => {
   }, {})
   eventList.push(eventData)
   
-  const dataInput = document.querySelector('.modal-form .date').value
+  const dataInput = document.querySelector('.modal-form .date')
   
-  if (eventDateIsEqualSelectedDay(dataInput)) 
-  createNewEvent(eventData)
+  if (eventDateIsEqualSelectedDay(dataInput.value)) 
+    createNewEvent(eventData)
   
   inputsElement.forEach(input => input.value = '')
   updateEventsFromLocalStorage()
@@ -126,15 +126,16 @@ const handleEventEdit = eventDetails => {
           }
         }
       })
-      
-      modal.addEventListener('click', (e) => handleDeleteEventCard(e, eventCard))
-      eventList.forEach((eventData, i) => {
-        const { title, description, date, startHour, endHour} = eventData
 
-          if(title === event.title && description === event.description && date === event.date && startHour === event.startHour && endHour === event.endHour) {
-            eventList.splice(i, 1)
-            updateEventsFromLocalStorage()
-          }
+      modal.addEventListener('click', (e) => handleDeleteEventCard(e, eventCard)) 
+
+      eventList.forEach((eventData, i) => {
+        const isEquals = JSON.stringify(eventData) == JSON.stringify(event)
+
+        if(isEquals) {
+          eventList.splice(i, 1)
+          updateEventsFromLocalStorage()
+        }
       })
 
       // events.removeChild(eventCard)
@@ -174,7 +175,8 @@ const handleDeleteEventCard = (e, eventCard) => {
     modal.style.display = 'none'
     
     if(!eventCard) return
-    events.removeChild(eventCard)
+    // if(events.childNodes.length === 0) return
+    eventCard.remove()
   }
 }
 
