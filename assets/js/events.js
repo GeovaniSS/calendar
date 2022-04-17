@@ -9,6 +9,14 @@ const loadEventsFromLocalStorage = () => {
 
   if(!events) return
 
+  // Ordenar os eventos pelo horário de início
+  events.sort((objA, objB) => {
+    if (objA.startHour > objB.startHour) return 1;
+    if (objA.startHour < objB.startHour) return -1;
+    return 0;
+  })
+
+  // Carregar os eventos do dia selecionado
   events
     .filter(event => {
       const { date } = event
@@ -17,13 +25,26 @@ const loadEventsFromLocalStorage = () => {
     .forEach(event => createNewEvent(event))
 }
 
+const eventDateIsEqualSelectedDay = eventDate => {
+  const date = new Date(`${eventDate} 00:00:00`)
+  const dateString = `${date.toLocaleDateString('pt-BR', {month: 'long'})}, ${date.getDate()}`
+  const selectedDay = document.querySelector('.selected-day').innerText.toLowerCase()
+
+  return dateString === selectedDay
+}
+
+const clearInputsElement = () => {
+  const inputsElement = [...document.querySelectorAll('.modal-form input')]
+  inputsElement.forEach(input => input.value = '')
+}
+
 const handleModalFormData = (e) => {
-  e.preventDefault()
+  // e.preventDefault()
   modal.style.display = 'none'
   
   const inputsElement = [...document.querySelectorAll('.modal-form input')]
   const eventData = inputsElement.reduce((acc, input) => {
-    acc[input.classList.value] = input.value 
+    acc[input.classList.value] = input.value.trim()
     return acc
   }, {})
   eventList.push(eventData)
@@ -33,19 +54,12 @@ const handleModalFormData = (e) => {
   if (eventDateIsEqualSelectedDay(dataInput.value)) 
     createNewEvent(eventData)
   
-  inputsElement.forEach(input => input.value = '')
+  clearInputsElement()
   updateEventsFromLocalStorage()
 }
 
-const eventDateIsEqualSelectedDay = (eventDate) => {
-  const date = new Date(`${eventDate} 00:00:00`)
-  const dateString = `${date.toLocaleDateString('pt-BR', {month: 'long'})}, ${date.getDate()}`
-  const selectedDay = document.querySelector('.selected-day').innerText.toLowerCase()
-
-  return dateString === selectedDay
-}
-
 const updateEventsFromLocalStorage = () => {
+  // Salvar os eventos no armazenamento local do navegador
   localStorage.setItem('events', JSON.stringify(eventList))
 }
 
@@ -84,8 +98,7 @@ const createNewEvent = eventData => {
   events.appendChild(eventCard)
 
   eventCard.addEventListener('click', () => handleClickEventCard(eventCard))
-  eventDetails.addEventListener('click', () => handleEventEdit(eventDetails))
-  
+  eventDetails.addEventListener('click', () => handleEventEdit(eventDetails))  
   // <div class="event-card">
   //   <div class="event">
   //     <h2 class="event-hour">15:00 - 16:00</h2>
@@ -96,12 +109,25 @@ const createNewEvent = eventData => {
   // </div>
 }
 
+const handleClickEventCard = event => {
+  const eventCards = events.children
+
+  for (let eventCard of eventCards) {
+    const eventCardIsBeingClicked = eventCard === event
+    const eventCardIsSelected = eventCard.classList.contains('selected')
+
+    if (eventCardIsBeingClicked) 
+      eventCard.classList.add('selected')
+
+    if(eventCardIsSelected)
+      eventCard.classList.remove('selected')
+  }
+}
+
 const handleEventEdit = eventDetails => {
   modal.style.display = 'flex'
 
   const eventCards = events.children
-
-  // if(!eventCards) return
 
   for (let eventCard of eventCards) {
     const eventCardIsBeingEdited = eventCard.lastChild === eventDetails
@@ -127,43 +153,21 @@ const handleEventEdit = eventDetails => {
         }
       })
 
-      modal.addEventListener('click', (e) => handleDeleteEventCard(e, eventCard)) 
-
       eventList.forEach((eventData, i) => {
-        const isEquals = JSON.stringify(eventData) == JSON.stringify(event)
-
+        const isEquals = JSON.stringify(eventData) === JSON.stringify(event)
+        
         if(isEquals) {
           eventList.splice(i, 1)
+          events.removeChild(eventCard)
           updateEventsFromLocalStorage()
         }
       })
-
-      // events.removeChild(eventCard)
-      // eventList.forEach((eventData, i) => {
-      //   const { title, description, date, startHour, endHour} = eventData
-
-      //     if(title === event.title && description === event.description && date === event.date && startHour === event.startHour && endHour === event.endHour) {
-      //       eventList.splice(i, 1)
-      //       updateEventsFromLocalStorage()
-      //     }
-      // })
-      // modal.addEventListener('click', (e) => {
-      //   const el = e.target
-        
-      //   if (el.classList.contains('close-modal')) {
+      // modal.onclick = (e) => handleDeleteEventCard(e, eventCard)
+      // form.onsubmit = () => {
+      //   if (eventCardIsBeingEdited) {
       //     events.removeChild(eventCard)
       //   }
-
-      //   eventList.forEach((eventData, i) => {
-      //     const { title, description, date, startHour, endHour} = eventData
-
-      //     if(title === event.title && description === event.description && date === event.date && startHour === event.startHour && endHour === event.endHour) {
-      //       eventList.splice(i, 1)
-      //       updateEventsFromLocalStorage()
-      //     }
-      //   })
-      // })
-      
+      // }
     }
   }
 }
@@ -175,23 +179,7 @@ const handleDeleteEventCard = (e, eventCard) => {
     modal.style.display = 'none'
     
     if(!eventCard) return
-    // if(events.childNodes.length === 0) return
-    eventCard.remove()
-  }
-}
-
-const handleClickEventCard = event => {
-  const eventCards = events.children
-
-  for (let eventCard of eventCards) {
-    const eventCardIsBeingClicked = eventCard === event
-    const eventCardIsSelected = eventCard.classList.contains('selected')
-
-    if (eventCardIsBeingClicked) 
-      eventCard.classList.add('selected')
-
-    if(eventCardIsSelected)
-      eventCard.classList.remove('selected')
+    events.removeChild(eventCard)
   }
 }
 
@@ -204,6 +192,7 @@ const loadModalDateInput = () => {
   const month = monthFromString(selectedDay[0])
   const day = selectedDay[1]
 
+  clearInputsElement()
   return dateInput.value = new Date(`2022-${month}-${day} 00:00:00`)
   .toLocaleDateString('pt-BR').split('/').reverse().join('-')
 }
