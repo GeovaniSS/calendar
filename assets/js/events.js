@@ -9,20 +9,25 @@ const loadEventsFromLocalStorage = () => {
 
   if(!events) return
 
-  // Ordenar os eventos pelo horário de início
-  events.sort((objA, objB) => {
-    if (objA.startHour > objB.startHour) return 1;
-    if (objA.startHour < objB.startHour) return -1;
-    return 0;
-  })
-
-  // Carregar os eventos do dia selecionado
   events
+    // Ordenar os eventos pelo horário de início
+    .sort((objA, objB) => {
+      if (objA.startHour > objB.startHour) return 1;
+      if (objA.startHour < objB.startHour) return -1;
+      return 0;
+    })
+
+    // Carregar os eventos do dia selecionado
     .filter(event => {
       const { date } = event
       return eventDateIsEqualSelectedDay(date)
     })
+
+    // Criar os eventos do dia selecionado no HTML
     .forEach(event => createNewEvent(event))
+    
+    // Carregar o evento do horário atual
+    loadCurrentEvent()
 }
 
 const eventDateIsEqualSelectedDay = eventDate => {
@@ -33,6 +38,30 @@ const eventDateIsEqualSelectedDay = eventDate => {
   return dateString === selectedDay
 }
 
+const loadCurrentEvent = () => {
+  const eventCards = events.children
+
+  for (let eventCard of eventCards) {
+    const eventWrapper = eventCard.firstChild
+    const eventHour = eventWrapper.firstChild.innerText.split(' - ')
+
+    const startHour = eventHour[0].split(':')
+    const endHour = eventHour[1].split(':')
+
+    const date = new Date()
+    const hour = date.getHours()
+    const day = date.getDate()
+
+    const selectedDay = document.querySelector('.selected-day').innerText.toLowerCase().split(', ')
+
+    if(selectedDay[1] != day) return
+
+    if (hour >= startHour[0] && hour <= endHour[0]) {
+      eventCard.classList.add('selected')
+    }
+  }
+}
+
 const clearInputsElement = () => {
   const inputsElement = [...document.querySelectorAll('.modal-form input')]
   inputsElement.forEach(input => input.value = '')
@@ -41,7 +70,8 @@ const clearInputsElement = () => {
 const handleModalFormData = (e) => {
   // e.preventDefault()
   modal.style.display = 'none'
-  
+
+  // Coletando os dados do formulário e criando um objeto
   const inputsElement = [...document.querySelectorAll('.modal-form input')]
   const eventData = inputsElement.reduce((acc, input) => {
     acc[input.classList.value] = input.value.trim()
@@ -49,10 +79,11 @@ const handleModalFormData = (e) => {
   }, {})
   eventList.push(eventData)
   
-  const dataInput = document.querySelector('.modal-form .date')
-  
-  if (eventDateIsEqualSelectedDay(dataInput.value)) 
+  // Criando o evento que seja igual ao dia selecionado
+  const { date } = eventData
+  if (eventDateIsEqualSelectedDay(date)) {
     createNewEvent(eventData)
+  }
   
   clearInputsElement()
   updateEventsFromLocalStorage()
@@ -98,15 +129,7 @@ const createNewEvent = eventData => {
   events.appendChild(eventCard)
 
   eventCard.addEventListener('click', () => handleClickEventCard(eventCard))
-  eventDetails.addEventListener('click', () => handleEventEdit(eventDetails))  
-  // <div class="event-card">
-  //   <div class="event">
-  //     <h2 class="event-hour">15:00 - 16:00</h2>
-  //     <h4 class="event-type">Estudar CSS</h4>
-  //     <p class="event-description">Origamid</p>
-  //   </div>
-  //   <span class="material-icons-sharp">more_horiz</span>
-  // </div>
+  eventDetails.addEventListener('click', () => handleEventEdit(eventDetails)) 
 }
 
 const handleClickEventCard = event => {
@@ -172,14 +195,11 @@ const handleEventEdit = eventDetails => {
   }
 }
 
-const handleDeleteEventCard = (e, eventCard) => {
+const closeModal = (e) => {
   const el = e.target
 
   if(el.classList.contains('close-modal')) {
     modal.style.display = 'none'
-    
-    if(!eventCard) return
-    events.removeChild(eventCard)
   }
 }
 
@@ -222,5 +242,5 @@ const monthFromString = monthString => {
 loadEventsFromLocalStorage()
 
 newEvent.addEventListener('click', () => loadModalDateInput())
-modal.addEventListener('click', (e) => handleDeleteEventCard(e))
+modal.addEventListener('click', (e) => closeModal(e))
 form.addEventListener('submit', (e) => handleModalFormData(e))

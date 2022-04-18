@@ -190,22 +190,37 @@ section {
   gap: 50px 0px;
 }
 
-.month-day {
+.month-days > div {
+  padding: 6px 12px;
+}
+
+.month-days > .today {
+  background-color: var(--orange);
+  color: var(--white);
+  padding: 6px 8px;
+  border-radius: 50%;
+}
+
+.prev-date, .next-date {
+  color: var(--light-gray);
+}
+
+/* .month-day {
   position: relative;
   display: flex;
   flex-direction: column;
-}
+} */
 
-.current-events, .next-events {
+/* .current-events, .next-events {
   position: absolute;
   width: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   place-items: center;
   gap: 5px 0;
-}
+} */
 
-.current-events {
+/* .current-events {
   top: 40px;
   bottom: 0;
 }
@@ -223,18 +238,8 @@ section {
   height: 4px;
   border-radius: 50%;
   background-color: var(--light-gray);
-}
+} */
 
-.prev-date, .next-date {
-  color: var(--light-gray);
-}
-
-.today {
-  background-color: var(--orange);
-  color: var(--white);
-  padding: 6px 12px;
-  border-radius: 50%;
-}
 
 /*-------------------------------*/
 /*        Calendar Events        */
@@ -309,6 +314,10 @@ section {
 @media screen and (max-width: 500px) {
   .header {
     justify-content: center;
+  }
+
+  .header-menu {
+    display: none;
   }
   
   .s-calendar {
