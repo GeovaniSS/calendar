@@ -86,12 +86,30 @@
       <span class="material-icons-sharp close-modal">cancel</span>
       <h3>Novo Evento</h3>
       <form class="modal-form">
-        <input type="text" class="title" placeholder="Título do Evento" required>
-        <input type="text" class="description" placeholder="Descrição do Evento" required>
-        <input type="date" class="date" placeholder="Data" required>
+        <div>
+          <label for="">Título</label>
+          <input type="text" class="title" placeholder="Título do Evento" required>
+        </div>
+
+        <div>
+          <label for="">Descrição</label>
+          <input type="text" class="description" placeholder="Descrição do Evento" required>
+        </div>
+
+        <div>
+          <label for="">Data</label>
+          <input type="date" class="date" placeholder="Data" required>
+        </div>
+
         <div class="time">
-          <input type="time" class="startHour" required>
-          <input type="time" class="endHour" required>
+          <div>
+            <label for="">Início</label>
+            <input type="time" class="startHour" required>
+          </div>
+          <div>
+            <label for="">Fim</label>
+            <input type="time" class="endHour" required>
+          </div>
         </div>
         <button class="create-event">Cria Evento</button>
       </form>
