@@ -62,19 +62,19 @@ const loadCurrentEvent = () => {
   }
 }
 
-const clearInputsElement = () => {
-  const inputsElement = [...document.querySelectorAll('.modal-form input')]
-  inputsElement.forEach(input => input.value = '')
+const clearFormElements = () => {
+  const formElements = [...document.querySelectorAll('.modal-form input'), document.querySelector('.modal-form textarea')]
+  formElements.forEach(el => el.value = '')
 }
 
 const handleModalFormData = (e) => {
-  // e.preventDefault()
+  e.preventDefault()
   modal.style.display = 'none'
 
   // Coletando os dados do formulário e criando um objeto
-  const inputsElement = [...document.querySelectorAll('.modal-form input')]
-  const eventData = inputsElement.reduce((acc, input) => {
-    acc[input.classList.value] = input.value.trim()
+  const formElements = [...document.querySelectorAll('.modal-form input'), document.querySelector('.modal-form textarea')]
+  const eventData = formElements.reduce((acc, el) => {
+    acc[el.classList.value] = el.value.trim()
     return acc
   }, {})
   eventList.push(eventData)
@@ -85,7 +85,7 @@ const handleModalFormData = (e) => {
     createNewEvent(eventData)
   }
   
-  clearInputsElement()
+  clearFormElements()
   updateEventsFromLocalStorage()
 }
 
@@ -161,23 +161,26 @@ const handleEventEdit = eventDetails => {
 
       const event = {
         title: eventHour.nextSibling.innerText,
-        description: eventWrapper.lastChild.innerText,
         date: loadModalDateInput(),
         startHour: eventHour.innerText.split(' - ')[0],
-        endHour: eventHour.innerText.split(' - ')[1]
+        endHour: eventHour.innerText.split(' - ')[1],
+        description: eventWrapper.lastChild.innerText
       }
 
-      const inputsElement = [...document.querySelectorAll('.modal-form input')]
-      inputsElement.forEach(input => {
+      const formElements = [...document.querySelectorAll('.modal-form input'), document.querySelector('.modal-form textarea')]
+      formElements.forEach(el => {
         for (let key in event) {
-          if(key === input.classList.value) {
-            input.value = event[key]
+          if(key === el.classList.value) {
+            el.value = event[key]
           }
         }
       })
 
       eventList.forEach((eventData, i) => {
         const isEquals = JSON.stringify(eventData) === JSON.stringify(event)
+
+        console.log(JSON.stringify(eventData))
+        console.log(JSON.stringify(event))
         
         if(isEquals) {
           eventList.splice(i, 1)
@@ -185,12 +188,6 @@ const handleEventEdit = eventDetails => {
           updateEventsFromLocalStorage()
         }
       })
-      // modal.onclick = (e) => handleDeleteEventCard(e, eventCard)
-      // form.onsubmit = () => {
-      //   if (eventCardIsBeingEdited) {
-      //     events.removeChild(eventCard)
-      //   }
-      // }
     }
   }
 }
@@ -212,7 +209,7 @@ const loadModalDateInput = () => {
   const month = monthFromString(selectedDay[0])
   const day = selectedDay[1]
 
-  clearInputsElement()
+  clearFormElements()
   return dateInput.value = new Date(`2022-${month}-${day} 00:00:00`)
   .toLocaleDateString('pt-BR').split('/').reverse().join('-')
 }
