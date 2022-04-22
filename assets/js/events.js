@@ -16,13 +16,11 @@ const loadEventsFromLocalStorage = () => {
       if (objA.startHour < objB.startHour) return -1;
       return 0;
     })
-
     // Carregar os eventos do dia selecionado
     .filter(event => {
       const { date } = event
       return eventDateIsEqualSelectedDay(date)
     })
-
     // Criar os eventos do dia selecionado no HTML
     .forEach(event => createNewEvent(event))
     
@@ -30,41 +28,35 @@ const loadEventsFromLocalStorage = () => {
     loadCurrentEvent()
 }
 
-const eventDateIsEqualSelectedDay = eventDate => {
-  const date = new Date(`${eventDate} 00:00:00`)
-  const dateString = `${date.toLocaleDateString('pt-BR', {month: 'long'})}, ${date.getDate()}`
-  const selectedDay = document.querySelector('.selected-day').innerText.toLowerCase()
-
-  return dateString === selectedDay
-}
-
 const loadCurrentEvent = () => {
   const eventCards = events.children
 
   for (let eventCard of eventCards) {
-    const eventWrapper = eventCard.firstChild
-    const eventHour = eventWrapper.firstChild.innerText.split(' - ')
+    const eventHour = eventCard.querySelector('.event-hour').innerText.split(' - ')
 
-    const startHour = eventHour[0].split(':')
-    const endHour = eventHour[1].split(':')
+    const startHour = eventHour[0].split(':').join('')
+    const endHour = eventHour[1].split(':').join('')
 
-    const date = new Date()
-    const hour = date.getHours()
-    const day = date.getDate()
+    const day = new Date().getDate()
+    const hour = new Date().getHours()
+    const minutes = new Date().getMinutes()
+    const hours = String(hour) + String(minutes)
 
     const selectedDay = document.querySelector('.selected-day').innerText.toLowerCase().split(', ')
 
     if(selectedDay[1] != day) return
-
-    if (hour >= startHour[0] && hour <= endHour[0]) {
+    if (hours >= startHour && hours <= endHour) {
       eventCard.classList.add('selected')
     }
   }
 }
 
-const clearFormElements = () => {
-  const formElements = [...document.querySelectorAll('.modal-form input'), document.querySelector('.modal-form textarea')]
-  formElements.forEach(el => el.value = '')
+const eventDateIsEqualSelectedDay = eventDate => {
+  const date = new Date(`${eventDate} 00:00:00`)
+  const eventDateString = `${date.toLocaleDateString('pt-BR', {month: 'long'})}, ${date.getDate()}`
+  const selectedDay = document.querySelector('.selected-day').innerText.toLowerCase()
+
+  return eventDateString === selectedDay
 }
 
 const handleModalFormData = (e) => {
@@ -72,20 +64,18 @@ const handleModalFormData = (e) => {
   modal.style.display = 'none'
 
   // Coletando os dados do formulário e criando um objeto
-  const formElements = [...document.querySelectorAll('.modal-form input'), document.querySelector('.modal-form textarea')]
-  const eventData = formElements.reduce((acc, el) => {
-    acc[el.classList.value] = el.value.trim()
-    return acc
+  const formElements = [...document.querySelectorAll('.form-elements')]
+  const eventData = formElements.reduce((obj, el) => {
+    obj[el.id] = el.value.trim()
+    return obj
   }, {})
   eventList.push(eventData)
   
   // Criando o evento que seja igual ao dia selecionado
   const { date } = eventData
-  if (eventDateIsEqualSelectedDay(date)) {
+  if (eventDateIsEqualSelectedDay(date)) 
     createNewEvent(eventData)
-  }
   
-  clearFormElements()
   updateEventsFromLocalStorage()
 }
 
@@ -100,36 +90,36 @@ const createNewEvent = eventData => {
   const eventCard = document.createElement('div')
   eventCard.classList.add('event-card')
 
-  const eventWrapper = document.createElement('div')
-  eventWrapper.classList.add('event')
+  const eventDetails = document.createElement('div')
+  eventDetails.classList.add('event-details')
 
-  const eventDetails = document.createElement('span')
-  eventDetails.classList.add('material-icons-sharp')
-  eventDetails.innerText = 'more_horiz'
+  const eventEdit = document.createElement('span')
+  eventEdit.classList.add('material-icons-sharp')
+  eventEdit.innerText = 'more_horiz'
 
-  eventCard.appendChild(eventWrapper)
   eventCard.appendChild(eventDetails)
+  eventCard.appendChild(eventEdit)
 
   const eventHour = document.createElement('h2')
   eventHour.classList.add('event-hour')
   eventHour.innerText = `${startHour} - ${endHour}`
 
   const eventTitle = document.createElement('h4')
-  eventTitle.classList.add('event-type')
+  eventTitle.classList.add('event-title')
   eventTitle.innerText = title
 
   const eventDescription = document.createElement('p')
   eventDescription.classList.add('event-description')
   eventDescription.innerText = description
 
-  eventWrapper.appendChild(eventHour)
-  eventWrapper.appendChild(eventTitle)
-  eventWrapper.appendChild(eventDescription)
+  eventDetails.appendChild(eventHour)
+  eventDetails.appendChild(eventTitle)
+  eventDetails.appendChild(eventDescription)
 
   events.appendChild(eventCard)
 
   eventCard.addEventListener('click', () => handleClickEventCard(eventCard))
-  eventDetails.addEventListener('click', () => handleEventEdit(eventDetails)) 
+  eventEdit.addEventListener('click', () => handleEventEdit(eventEdit)) 
 }
 
 const handleClickEventCard = event => {
@@ -147,42 +137,38 @@ const handleClickEventCard = event => {
   }
 }
 
-const handleEventEdit = eventDetails => {
+const handleEventEdit = eventEdit => {
   modal.style.display = 'flex'
 
   const eventCards = events.children
 
   for (let eventCard of eventCards) {
-    const eventCardIsBeingEdited = eventCard.lastChild === eventDetails
+    const eventCardIsBeingEdited = eventCard.lastChild === eventEdit
 
     if (eventCardIsBeingEdited) { 
-      const eventWrapper = eventCard.firstChild
-      const eventHour = eventWrapper.firstChild
+      const eventHour = eventCard.querySelector('.event-hour').innerText.split(' - ')
 
       const event = {
-        title: eventHour.nextSibling.innerText,
+        title: eventCard.querySelector('.event-title').innerText,
+        description: eventCard.querySelector('.event-description').innerText,
         date: loadModalDateInput(),
-        startHour: eventHour.innerText.split(' - ')[0],
-        endHour: eventHour.innerText.split(' - ')[1],
-        description: eventWrapper.lastChild.innerText
+        startHour: eventHour[0],
+        endHour: eventHour[1]
       }
 
-      const formElements = [...document.querySelectorAll('.modal-form input'), document.querySelector('.modal-form textarea')]
+      const formElements = [...document.querySelectorAll('.form-elements')]
       formElements.forEach(el => {
         for (let key in event) {
-          if(key === el.classList.value) {
+          if(key === el.id) {
             el.value = event[key]
           }
         }
       })
 
       eventList.forEach((eventData, i) => {
-        const isEquals = JSON.stringify(eventData) === JSON.stringify(event)
-
-        console.log(JSON.stringify(eventData))
-        console.log(JSON.stringify(event))
+        const eventDataIsEqualsEditEvent = JSON.stringify(eventData) === JSON.stringify(event)
         
-        if(isEquals) {
+        if(eventDataIsEqualsEditEvent) {
           eventList.splice(i, 1)
           events.removeChild(eventCard)
           updateEventsFromLocalStorage()
@@ -192,25 +178,15 @@ const handleEventEdit = eventDetails => {
   }
 }
 
-const closeModal = (e) => {
-  const el = e.target
-
-  if(el.classList.contains('close-modal')) {
-    modal.style.display = 'none'
-  }
-}
-
 const loadModalDateInput = () => {
-  modal.style.display = 'flex'
+  const date = document.querySelector('.date').innerText.split(' ')
+  const dateInput = document.getElementById('date')
 
-  const dateInput = document.querySelector('.modal-form .date')
-  const selectedDay = document.querySelector('.selected-day').innerText.split(', ')
-
-  const month = monthFromString(selectedDay[0])
-  const day = selectedDay[1]
-
-  clearFormElements()
-  return dateInput.value = new Date(`2022-${month}-${day} 00:00:00`)
+  const year = date[1]
+  const month = monthFromString(date[0])
+  const day = document.querySelector('.selected-day').innerText.split(', ')[1]
+  
+  return dateInput.value = new Date(`${year}-${month}-${day} 00:00:00`)
   .toLocaleDateString('pt-BR').split('/').reverse().join('-')
 }
 
@@ -229,15 +205,34 @@ const monthFromString = monthString => {
     novembro: '11',
     dezembro: '12'
   }
-
+  
   for (let month in months) {
     if(month === monthString.toLowerCase()) 
-      return months[month]
+    return months[month]
+  }
+}
+
+const clearFormElements = () => {
+  const formElements = [...document.querySelectorAll('.form-elements')]
+  formElements.forEach(el => el.value = '')
+}
+
+const openModal = () => {
+  modal.style.display = 'flex'
+  clearFormElements()
+  loadModalDateInput()
+}
+
+const closeModal = (e) => {
+  const el = e.target
+
+  if(el.classList.contains('close-modal')) {
+    modal.style.display = 'none'
   }
 }
 
 loadEventsFromLocalStorage()
 
-newEvent.addEventListener('click', () => loadModalDateInput())
+newEvent.addEventListener('click', () => openModal())
 modal.addEventListener('click', (e) => closeModal(e))
 form.addEventListener('submit', (e) => handleModalFormData(e))

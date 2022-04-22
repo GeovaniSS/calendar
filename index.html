@@ -69,13 +69,13 @@
         <div class="divider"></div>
         <div class="events">
           <!-- // <div class="event-card">
-            //   <div class="event">
+          //   <div class="event-details">
             //     <h2 class="event-hour">15:00 - 16:00</h2>
-            //     <h4 class="event-type">Estudar CSS</h4>
+            //     <h4 class="event-title">Estudar CSS</h4>
             //     <p class="event-description">Origamid</p>
-            //   </div>
-            //   <span class="material-icons-sharp">more_horiz</span>
-            // </div> -->
+          //   </div>
+          //   <span class="material-icons-sharp">more_horiz</span>
+          // </div> -->
         </div>
       </div>
     </div>
@@ -86,31 +86,27 @@
       <span class="material-icons-sharp close-modal">cancel</span>
       <h3>Novo Evento</h3>
       <form class="modal-form">
-        <div>
-          <label for="">Título</label>
-          <input type="text" class="title" placeholder="Título do Evento" required>
-        </div>
-
-        <div>
-          <label for="desc">Descrição</label>
-          <textarea id="desc" class="description" placeholder="Descrição do Evento"></textarea>
-        </div>
-
-        <div>
-          <label for="">Data</label>
-          <input type="date" class="date" placeholder="Data" required>
-        </div>
-
+        <label for="title">Título</label>
+        <input type="text" id="title" class="form-elements" placeholder="Título do Evento" required>
+      
+        <label for="description">Descrição</label>
+        <textarea id="description" class="form-elements" placeholder="Descrição do Evento"></textarea>
+       
+        <label for="date">Data</label>
+        <input type="date" id="date" class="form-elements" placeholder="Data" required>
+    
         <div class="time">
           <div>
-            <label for="">Início</label>
-            <input type="time" class="startHour" required>
+            <label for="startHour">Início</label>
+            <input type="time" id="startHour" class="form-elements" required>
           </div>
+
           <div>
-            <label for="">Fim</label>
-            <input type="time" class="endHour" required>
+            <label for="endHour">Fim</label>
+            <input type="time" id="endHour" class="form-elements" required>
           </div>
         </div>
+
         <button class="create-event">Cria Evento</button>
       </form>
     </div>

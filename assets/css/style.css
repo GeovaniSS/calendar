@@ -285,7 +285,7 @@ section {
   background-color: var(--light-orange);
 }
 
-.event {
+.event-details {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -301,7 +301,7 @@ section {
   color: var(--orange);
 }
 
-.event-type {
+.event-title {
   font-weight: 500;
   color: var(--brown);
 }
