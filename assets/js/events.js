@@ -23,31 +23,30 @@ const loadEventsFromLocalStorage = () => {
     })
     // Criar os eventos do dia selecionado no HTML
     .forEach(event => createNewEvent(event))
-    
-    // Carregar o evento do horário atual
-    loadCurrentEvent()
 }
 
-const loadCurrentEvent = () => {
+const loadCurrentTimeEvent = () => {
   const eventCards = events.children
 
   for (let eventCard of eventCards) {
     const eventHour = eventCard.querySelector('.event-hour').innerText.split(' - ')
-
-    const startHour = eventHour[0].split(':').join('')
-    const endHour = eventHour[1].split(':').join('')
-
-    const day = new Date().getDate()
+    const startHour = eventHour[0]
+    const endHour = eventHour[1]
+    
     const hour = new Date().getHours()
     const minutes = new Date().getMinutes()
-    const hours = String(hour) + String(minutes)
-
-    const selectedDay = document.querySelector('.selected-day').innerText.toLowerCase().split(', ')
-
-    if(selectedDay[1] != day) return
+    const hours = String(hour) + ':' + String(minutes)
+    
     if (hours >= startHour && hours <= endHour) {
       eventCard.classList.add('selected')
     }
+
+    // const startHour = eventHour[0].split(':').join('')
+    // const endHour = eventHour[1].split(':').join('')
+    
+    // const day = new Date().getDate()
+    // const selectedDay = document.querySelector('.selected-day').innerText.toLowerCase().split(', ')
+    // if(selectedDay[1] != day) return
   }
 }
 
@@ -232,6 +231,7 @@ const closeModal = (e) => {
 }
 
 loadEventsFromLocalStorage()
+loadCurrentTimeEvent()
 
 newEvent.addEventListener('click', () => openModal())
 modal.addEventListener('click', (e) => closeModal(e))
