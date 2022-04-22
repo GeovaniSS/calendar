@@ -68,15 +68,20 @@ const loadCalendar = month => {
 const handleSelectedDay = month => {
   const days = document.querySelectorAll('.month-days div')
 
-  days.forEach(day => day.addEventListener('click', () => {
-    if (day.classList.contains('prev-date')) 
-      return loadSelectedDay(month - 1, day.innerText)
+  days.forEach(day => day.addEventListener('click', () => {  
+    if (day.classList.contains('prev-date')) {
+      loadSelectedDay(month - 1, day.innerText)
+      events.innerText = ''
+      return loadEventsFromLocalStorage()
+    }
     
-    if (day.classList.contains('next-date')) 
-      return loadSelectedDay(month + 1, day.innerText)
-    
+    if (day.classList.contains('next-date')) {
+      loadSelectedDay(month + 1, day.innerText)
+      events.innerText = ''
+      return loadEventsFromLocalStorage()
+    }
+  
     loadSelectedDay(month, day.innerText)
-    
     events.innerText = ''
     loadEventsFromLocalStorage()
   }))

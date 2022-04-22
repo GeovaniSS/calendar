@@ -5,11 +5,14 @@ const events = document.querySelector('.events')
 let eventList = JSON.parse(localStorage.getItem('events')) || []
 
 const loadEventsFromLocalStorage = () => {
-  const events = JSON.parse(localStorage.getItem('events'))
+  const eventStorage = JSON.parse(localStorage.getItem('events'))
 
-  if(!events) return
+  if(!eventStorage) return
 
-  events
+  // Apagar todos os eventos da div events
+  // events.remove()
+
+  eventStorage
     // Ordenar os eventos pelo horário de início
     .sort((objA, objB) => {
       if (objA.startHour > objB.startHour) return 1;

@@ -145,7 +145,7 @@ section {
 
 .s-calendar--events {
   display: grid;
-  grid-template-columns: minmax(320px, auto) minmax(320px, 450px);
+  grid-template-columns: minmax(450px, auto) minmax(240px, auto);
   gap: 80px;
   max-width: 1200px;
   padding: 20px;
@@ -204,42 +204,6 @@ section {
 .prev-date, .next-date {
   color: var(--light-gray);
 }
-
-/* .month-day {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-} */
-
-/* .current-events, .next-events {
-  position: absolute;
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  place-items: center;
-  gap: 5px 0;
-} */
-
-/* .current-events {
-  top: 40px;
-  bottom: 0;
-}
-
-.next-events {
-  gap: 10px;
-  top: 32px;
-  bottom: 0;
-}
-
-.current-events span, .next-events span {
-  display: inline-block;
-  content: ' ';
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background-color: var(--light-gray);
-} */
-
 
 /*-------------------------------*/
 /*        Calendar Events        */
@@ -311,6 +275,12 @@ section {
   color: var(--gray);
 }
 
+@media screen and (max-width: 800px) {
+  .s-calendar--events {
+    grid-template-columns: minmax(400px, auto);
+  }
+}
+
 @media screen and (max-width: 500px) {
   .header {
     justify-content: center;
@@ -325,15 +295,24 @@ section {
   }
 
   .s-calendar p {
-    text-align: center;
-    width: 30ch;
+    display: none;
   }
 
   .s-calendar--container {
     justify-content: center;
   }
 
+  .add-event {
+    margin-top: 20px;
+    width: 50%;
+    padding: 10px 0px;
+  }
+
   .s-calendar--events {
-    grid-template-columns: minmax(320px, auto);
+    grid-template-columns: minmax(280px, auto);
+  }
+
+  .month-days > div {
+    padding: 0;
   }
 }
