@@ -20,13 +20,18 @@
   --white: #fff;
 }
 
+html {
+  font-size: 62.5%;
+}
+
 body {
   background-color: var(--bg-color);
+  font-size: 1.6rem;
   font-family: 'Inter';
 }
 
 h1 {
-  font-size: 36px;
+  font-size: 3.4rem;
   color: var(--dark);
 }
 
@@ -42,7 +47,7 @@ button {
   border: none;
   font-family: 'Inter';
   font-weight: bold;
-  font-size: 18px;
+  font-size: 1.8rem;
   color: var(--white);
 }
 
@@ -63,7 +68,6 @@ section {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 20px; 
   max-width: 1200px;
   padding: 20px;
   margin: auto;
@@ -83,7 +87,7 @@ section {
 
 .header-menu span {
   cursor: pointer;
-  font-size: 28px;
+  font-size: 2.8rem;
   color: var(--brown);
 }
 
@@ -124,7 +128,7 @@ section {
 
 .s-calendar--year span {
   cursor: pointer;
-  font-size: 36px;
+  font-size: 3.6rem;
   color: var(--dark);
 }
 
@@ -216,7 +220,7 @@ section {
 }
 
 .selected-day {
-  font-size: 20px;
+  font-size: 2rem;
   font-weight: bold;
   text-transform: capitalize;
   color: var(--dark);
@@ -271,17 +275,26 @@ section {
 }
 
 .event-description {
-  font-size: 14px;
+  font-size: 1.4rem;
   color: var(--gray);
 }
 
 @media screen and (max-width: 800px) {
+  .s-calendar p {
+    padding: 0 0 0 10px;
+    width: 35ch;
+  }
+
   .s-calendar--events {
     grid-template-columns: minmax(400px, auto);
   }
 }
 
 @media screen and (max-width: 500px) {
+  html {
+    font-size: 55%;
+  }
+
   .header {
     justify-content: center;
   }
