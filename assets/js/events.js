@@ -33,23 +33,16 @@ const loadCurrentTimeEvent = () => {
 
   for (let eventCard of eventCards) {
     const eventHour = eventCard.querySelector('.event-hour').innerText.split(' - ')
-    const startHour = eventHour[0]
-    const endHour = eventHour[1]
-    
+    const startHour = eventHour[0] === '00:00' ? '24:00' : eventHour[0]
+    const endHour = eventHour[1] === '00:00' ? '24:00' : eventHour[1]
+
     const hour = new Date().getHours()
     const minutes = new Date().getMinutes()
-    const hours = String(hour) + ':' + String(minutes)
-    
+    const hours = String(hour === 0 ? '24' : hour) + ':' + String(minutes)
+
     if (hours >= startHour && hours <= endHour) {
       eventCard.classList.add('selected')
     }
-
-    // const startHour = eventHour[0].split(':').join('')
-    // const endHour = eventHour[1].split(':').join('')
-    
-    // const day = new Date().getDate()
-    // const selectedDay = document.querySelector('.selected-day').innerText.toLowerCase().split(', ')
-    // if(selectedDay[1] != day) return
   }
 }
 
