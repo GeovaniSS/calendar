@@ -165,7 +165,7 @@ const handleEventEdit = eventEdit => {
         
         if(eventDataIsEqualsEditEvent) {
           eventList.splice(i, 1)
-          events.removeChild(eventCard)
+          eventCard.remove()
           updateEventsFromLocalStorage()
         }
       })
@@ -177,9 +177,9 @@ const loadModalDateInput = () => {
   const date = document.querySelector('.date').innerText.split(' ')
   const dateInput = document.getElementById('date')
 
-  const year = date[1]
-  const month = monthFromString(date[0])
   const day = document.querySelector('.selected-day').innerText.split(', ')[1]
+  const month = monthFromString(date[0])
+  const year = date[1]
   
   return dateInput.value = new Date(`${year}-${month}-${day} 00:00:00`)
   .toLocaleDateString('pt-BR').split('/').reverse().join('-')
@@ -220,7 +220,7 @@ const openModal = () => {
 
 const closeModal = (e) => {
   const el = e.target
-
+  
   if(el.classList.contains('close-modal')) {
     modal.style.display = 'none'
   }
